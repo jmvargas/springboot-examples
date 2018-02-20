@@ -7,11 +7,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class SpringbootProjectApplication {
-	private final static Logger logger = LoggerFactory.getLogger(SpringbootProjectApplication.class.getName());
+	private final static Logger logger = LoggerFactory.getLogger(SpringbootProjectApplication.class);
 
 	public static void main(String[] args) {
+		SpringApplication.run(SpringbootProjectApplication.class, args);
 		logger.info("info msg");
 		logger.debug("debug msg");
-		SpringApplication.run(SpringbootProjectApplication.class, args);
 	}
 }
