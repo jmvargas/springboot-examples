@@ -76,4 +76,12 @@ public class ProductRepositoryTest {
         assertNull(productRepository.findOne(product1.getId()));
     }
 
+    @Test
+    public void testFindByProductIdAndPrice(){
+        Product found = productRepository.findByProductIdAndPrice("1232", new BigDecimal("21.95"));
+        assertNotNull(found.getId());
+        assertEquals(found.getProductId(), "1232");
+        assertEquals(found.getPrice(), new BigDecimal("21.95"));
+    }
+
 }
