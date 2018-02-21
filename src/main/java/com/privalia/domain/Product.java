@@ -12,8 +12,10 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
+@DynamicUpdate(value = true)
 public class Product {
 
     @Id

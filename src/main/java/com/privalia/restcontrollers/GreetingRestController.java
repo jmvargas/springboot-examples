@@ -16,6 +16,5 @@ public class GreetingRestController {
         logger.info("Info greeting");
         logger.debug("Debug greeting");
         return String.format(template, name);
-
     }
 }

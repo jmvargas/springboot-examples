@@ -9,8 +9,12 @@ import com.privalia.domain.Product;
 import com.privalia.repositories.ProductRepository;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -25,6 +29,11 @@ public class ProductRepositoryTest {
     private Product product1 = null;
     private Product product2 = null;
 
+    @Rule
+    public TestName testName = new TestName();
+
+    Logger logger = LoggerFactory.getLogger(ProductRepositoryTest.class);
+
     @Before
     public void setUp() throws Exception {
         product1 = new Product();
@@ -38,10 +47,12 @@ public class ProductRepositoryTest {
         product2.setPrice(new BigDecimal("23.85"));
         product2.setProductId("1233");
         productRepository.save(product2);
+        logger.info("Started test " + testName.getMethodName());
     }
 
     @After
     public void after(){
+        logger.info("Finished test " + testName.getMethodName());
         productRepository.deleteAll();
     }
 
@@ -82,6 +93,32 @@ public class ProductRepositoryTest {
         assertNotNull(found.getId());
         assertEquals(found.getProductId(), "1232");
         assertEquals(found.getPrice(), new BigDecimal("21.95"));
+    }
+
+    @Test
+    public void testFindByProductId(){
+        Product found = productRepository.findByProductId("1233");
+        assertNotNull(found.getId());
+        assertEquals(found.getProductId(), "1233");
+    }
+
+    @Test
+    public void testFindByDescriptionAndPrice(){
+        Product found = productRepository.findByDescriptionAndPrice("Privalia Spring Framework", new BigDecimal("23.85"));
+        assertNotNull(found.getId());
+        assertEquals(found.getProductId(), "1233");
+        assertEquals(found.getDescription(), "Privalia Spring Framework");
+        assertEquals(found.getPrice(), new BigDecimal("23.85"));
+    }
+    @Test
+    public void testUpdateProduct(){
+        product1.setDescription("hello");
+        int rowsAffected = productRepository.updateProduct(product1.getId(), product1.getDescription());
+        assertEquals(rowsAffected, 1);
+
+        Product p = productRepository.findOne(product1.getId());
+        assertEquals(p.getDescription(), "hello");
+        assertEquals(p.getId(),product1.getId());
     }
 
 }
